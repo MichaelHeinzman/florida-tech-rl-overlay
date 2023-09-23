@@ -1,0 +1,10 @@
+:root,
+html,
+body,
+main {
+  width: 1920px;
+  height: 1080px;
+  background-image: url(https://cdn.discordapp.com/attachments/1122913573606269084/1123683827169103942/28-06-2023.20.37.58.png);
+  background-repeat: no-repeat;
+  font-family: "Lato";
+}
