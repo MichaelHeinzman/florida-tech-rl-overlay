@@ -2,18 +2,21 @@ import { derived } from "svelte/store";
 import { socketMessageStore } from "./socket";
 
 export const goal_scored = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return;
   if ($msg?.event === "game:goal_scored") {
     set($msg.data);
   }
 });
 
 export const updateState = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return;
   if ($msg?.event === "game:update_state") {
     set($msg.data);
   }
 });
 
 export const scores = derived(updateState, ($update, set) => {
+  if (!$update) return;
   if ($update?.game?.teams) {
     const scores = {
       [0]: $update.game.teams[0].score,
@@ -29,6 +32,7 @@ export const scores = derived(updateState, ($update, set) => {
 });
 
 export const targetPlayer = derived(updateState, ($update, set) => {
+  if (!$update) return;
   if ($update?.game?.hasTarget) {
     const player = $update.players[$update.game.target];
     set(player);
@@ -38,6 +42,7 @@ export const targetPlayer = derived(updateState, ($update, set) => {
 });
 
 export const players = derived(updateState, ($update, set) => {
+  if (!$update) return;
   if ($update?.players) {
     const players = $update.players;
     set(players);
@@ -47,12 +52,14 @@ export const players = derived(updateState, ($update, set) => {
 });
 
 export const config = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return;
   if ($msg?.event === "config:update_config") {
     set($msg.data);
   }
 });
 
 export const colors = derived(config, ($update, set) => {
+  if (!$update) return;
   if ($update?.colors) {
     const colors = $update.colors;
     set(colors);
@@ -65,6 +72,7 @@ export const colors = derived(config, ($update, set) => {
 });
 
 export const logos = derived(config, ($update, set) => {
+  if (!$update) return;
   if ($update?.logos) {
     const logos = $update.logos;
     set(logos);
@@ -83,7 +91,7 @@ export const logos = derived(config, ($update, set) => {
 });
 
 export const team_info = derived(config, ($update, set) => {
-  // if (!$update) return;
+  if (!$update) return;
 
   if ($update?.team_info) {
     const team_info = $update.team_info;
@@ -113,6 +121,7 @@ export const team_info = derived(config, ($update, set) => {
 });
 
 export const series = derived(config, ($update, set) => {
+  if (!$update) return;
   if ($update?.series) {
     const series = $update.series;
     set(series);
