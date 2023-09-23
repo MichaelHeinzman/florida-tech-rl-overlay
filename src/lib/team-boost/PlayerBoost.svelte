@@ -2,20 +2,20 @@
     export let player = {
         boost: 70,
         name: "Name Placeholder",
-        team: 0,
+        team_num: 0,
     }
     import Boost from "./Boost.svelte";
   </script>
   
   <div class="player_boost_box">
     <div class="player_boost_text">
-      <div class={`name ${player?.team === 0 ? "left_name" : "right_name"}`}>
+      <div class={`name ${player?.team_num === 0 ? "left_name" : "right_name"}`}>
         {player?.name}
       </div>
       <span class="boost_bar_amount name">{player?.boost}</span>
     </div>
 
-    <Boost percent="{player.boost}" team={player?.team}/>
+    <Boost percent="{player.boost}" team_num={player?.team_num}/>
   </div>
   
   <style>

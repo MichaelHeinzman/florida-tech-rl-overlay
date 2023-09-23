@@ -8,9 +8,9 @@
 
 <main class="app">
     <Scoreboard/>
-      <PlayerCard />
-      <TeamPlayerBoost team={0}/>
-      <TeamPlayerBoost team={1}/>
+    <PlayerCard />
+    <TeamPlayerBoost team_num={0}/>
+    <TeamPlayerBoost team_num={1}/>
 </main>
 
 <style>

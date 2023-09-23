@@ -1,18 +1,35 @@
 import { derived } from "svelte/store";
 import { socketMessageStore } from "./socket";
 
-export const updateState = derived(socketMessageStore, ($msg, set) => {
-  if (!$msg) return;
-
-  if ($msg.event === "game:update_state") {
+export const goal_scored = derived(socketMessageStore, ($msg, set) => {
+  if ($msg?.event === "game:goal_scored") {
     set($msg.data);
   }
 });
 
-export const targetPlayer = derived(updateState, ($update, set) => {
-  if (!$update) return;
+export const updateState = derived(socketMessageStore, ($msg, set) => {
+  if ($msg?.event === "game:update_state") {
+    set($msg.data);
+  }
+});
 
-  if ($update.game.hasTarget) {
+export const scores = derived(updateState, ($update, set) => {
+  if ($update?.game?.teams) {
+    const scores = {
+      [0]: $update.game.teams[0].score,
+      [1]: $update.game.teams[1].score,
+    };
+    set(scores);
+  } else {
+    set({
+      [0]: 5,
+      [1]: 5,
+    });
+  }
+});
+
+export const targetPlayer = derived(updateState, ($update, set) => {
+  if ($update?.game?.hasTarget) {
     const player = $update.players[$update.game.target];
     set(player);
   } else {
@@ -21,9 +38,7 @@ export const targetPlayer = derived(updateState, ($update, set) => {
 });
 
 export const players = derived(updateState, ($update, set) => {
-  if (!$update) return;
-
-  if ($update.players) {
+  if ($update?.players) {
     const players = $update.players;
     set(players);
   } else {
@@ -32,16 +47,12 @@ export const players = derived(updateState, ($update, set) => {
 });
 
 export const config = derived(socketMessageStore, ($msg, set) => {
-  if (!$msg) return;
-
-  if ($msg.event === "config:update_config") {
+  if ($msg?.event === "config:update_config") {
     set($msg.data);
   }
 });
 
 export const colors = derived(config, ($update, set) => {
-  // if (!$update) return;
-
   if ($update?.colors) {
     const colors = $update.colors;
     set(colors);
@@ -54,8 +65,6 @@ export const colors = derived(config, ($update, set) => {
 });
 
 export const logos = derived(config, ($update, set) => {
-  // if (!$update) return;
-
   if ($update?.logos) {
     const logos = $update.logos;
     set(logos);
@@ -83,9 +92,38 @@ export const team_info = derived(config, ($update, set) => {
     set({
       [0]: {
         name: "Florida Tech",
+        players: {
+          "Four Leaf Grover": {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+        },
       },
       [1]: {
         name: "EARU Varsity",
+        players: {
+          "Four Leaf Grover": {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+        },
+      },
+    });
+  }
+});
+
+export const series = derived(config, ($update, set) => {
+  if ($update?.series) {
+    const series = $update.series;
+    set(series);
+  } else {
+    set({
+      best_of: 3,
+      [0]: {
+        score: 1,
+      },
+      [1]: {
+        score: 1,
       },
     });
   }

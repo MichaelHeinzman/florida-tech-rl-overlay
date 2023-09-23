@@ -1,14 +1,14 @@
 <script>
     import { getColorsFromTeam } from "./helpers";
-    import {targetPlayer} from "./processor";
-    import {colors} from "./processor";
+    import {targetPlayer, goal_scored} from "./processor";
+    import {colors, team_info} from "./processor";
     import Boost from "./team-boost/Boost.svelte";
 </script>
   
-<div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}">
+<div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team_num, $colors)?.primary}">
     <div class="player_card_boost_box">
         <span>{$targetPlayer?.name}</span>
-        <Boost percent={80} target={true} colors={{box: "#121013", bar: "#fff"}}/>
+        <Boost percent={80} target={true} />
     </div>
     <div class="player_card_stat_box">
         <div class="player_card_stat_box_stat">
@@ -29,8 +29,8 @@
         </div>
     </div>
 
-    <div class="player_card_photo_box">
-        <img src="" alt={$targetPlayer?.name}/>
+    <div class="player_card_photo_box" style="box-shadow: 0px 4px 24px 15px {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}; display: {$goal_scored?.scorer?.id === $targetPlayer?.id && $team_info?.[$targetPlayer?.team_num]?.players ? "flex" : "none"}">
+        <img src={$team_info?.[$targetPlayer?.team_num]?.players?.[$targetPlayer?.name]?.photo} alt={$targetPlayer?.name} class="player_photo"/>
     </div>
 </div>
 
@@ -96,14 +96,20 @@
     }
     .player_card_photo_box {
         position: absolute;
-        bottom: 0px;
+        bottom: 30px;
+        left: 25px;
         margin-bottom: 54px;
-        width: 290px;
-        height: 250px;
+        width: 194px;
+        height: 304px;
         flex-shrink: 0;
-
-        border: 5px solid #1D1D21;
+        border-radius: 5px;
+        opacity: .5;
         background: rgba(217, 217, 217, 0.14);
-        display: none;
+        overflow: hidden;
+    }
+    .player_photo {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
     }
 </style>
