@@ -56,7 +56,7 @@ export const colors = derived(config, ($update, set) => {
 export const logos = derived(config, ($update, set) => {
   // if (!$update) return;
 
-  if ($update?.colors) {
+  if ($update?.logos) {
     const logos = $update.logos;
     set(logos);
   } else {
@@ -68,6 +68,24 @@ export const logos = derived(config, ($update, set) => {
       [1]: {
         primary:
           "https://cdn.discordapp.com/attachments/822578384479322160/1092609383868923954/eSports.png",
+      },
+    });
+  }
+});
+
+export const team_info = derived(config, ($update, set) => {
+  // if (!$update) return;
+
+  if ($update?.team_info) {
+    const team_info = $update.team_info;
+    set(team_info);
+  } else {
+    set({
+      [0]: {
+        name: "Florida Tech",
+      },
+      [1]: {
+        name: "EARU Varsity",
       },
     });
   }

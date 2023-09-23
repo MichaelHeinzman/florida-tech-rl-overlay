@@ -1,6 +1,6 @@
 <script>
     import { getColorsFromTeam } from "../helpers";
-import {logos, colors} from "../processor";
+import {logos, colors, team_info} from "../processor";
 </script>
 
 <div class="scoreboard">
@@ -12,12 +12,12 @@ import {logos, colors} from "../processor";
             <div class="team_series_point"/>
         </div>
         <div class="team_box_container left_team_box_container" style="background: linear-gradient(180deg, {getColorsFromTeam(0, $colors)?.primary} 0%, rgba(5, 0, 0, 0.53) 100%);">
-            <img class="team_box_logo" src={$logos?.[0]?.primary} />
+            <img class="team_box_logo" src={$logos?.[0]?.primary}  alt={$team_info[0]?.name}/>
             <span class="team_box_score">5</span>
         </div>
     </div>
-    <span class="team_box_name left_team_box_name">Florida Tech</span>
-    <span class="team_box_name right_team_box_name">EARU Varsity</span>
+    <span class="team_box_name left_team_box_name">{$team_info[0]?.name}</span>
+    <span class="team_box_name right_team_box_name">{$team_info[1]?.name}</span>
 
     <div class="team_box right_team_box" style="background: {getColorsFromTeam(1, $colors)?.primary}">
         <div class="team_series_box right_team_series_box">
@@ -28,7 +28,7 @@ import {logos, colors} from "../processor";
         </div>
         <div class="team_box_container right_team_box_container" style="background: linear-gradient(180deg, {getColorsFromTeam(1, $colors)?.primary} 0%, rgba(5, 0, 0, 0.53) 100%);">
             <span class="team_box_score">5</span>
-            <img class="team_box_logo" src={$logos?.[1]?.primary} />
+            <img class="team_box_logo" src={$logos?.[1]?.primary} alt={$team_info[1]?.name}/>
         </div>
     </div>
     <div class="time_box"><span class="time">5:00</span></div>
