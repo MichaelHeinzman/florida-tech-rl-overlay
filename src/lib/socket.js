@@ -21,21 +21,3 @@ socket.onmessage = ({ data }) => {
   const parsed = JSON.parse(data);
   socketMessageStore.set(parsed);
 };
-
-// Connect to broadcaster server on port 49322
-const socket_broadcaster = new WebSocket("ws://localhost:49322");
-
-socket_broadcaster.onopen = () => {
-  console.log("Connected to SOS.");
-};
-
-socket_broadcaster.onerror = (err) => {
-  console.error("WebSocket error", err);
-};
-
-socket_broadcaster.onmessage = ({ data }) => {
-  const parsed = JSON.parse(data);
-  console.log("New msg:", parsed);
-
-  socketMessageStore.set(parsed);
-};

@@ -1,5 +1,6 @@
 import { derived } from "svelte/store";
 import { socketMessageStore } from "./socket";
+import { socketOverlayMessageStore } from "./socket_overlay";
 import { convertSecondsToMinutesAndSeconds } from "./helpers";
 
 // MATCH CREATED EVENT
@@ -171,121 +172,46 @@ export const matchDestroyed = derived(socketMessageStore, ($msg, set) => {
   } else set(false);
 });
 
-const configTemplate = {
-  colors: {
-    [0]: { primary: "#700", secondary: "#FFF", mutual: "#121013" },
-    [1]: { primary: "#00549A", secondary: "#FFF", mutual: "#121013" },
-  },
-  logos: {
-    [0]: {
-      primary:
-        "https://floridatechsports.com/images/responsive_2021/AT-Panther_head-only.png",
-    },
-    [1]: {
-      primary:
-        "https://cdn.discordapp.com/attachments/822578384479322160/1092609383868923954/eSports.png",
-    },
-  },
-  team_info: {
-    [0]: {
-      name: "Florida Tech",
-      players: {
-        DASC: {
-          photo: "",
-        },
-        BEASTINNFEASTIN: {
-          photo: "",
-        },
-        AYYLO: {
-          photo: "",
-        },
-      },
-    },
-  },
-  series: {
-    best_of: 3,
-    [0]: {
-      score: 1,
-    },
-    [1]: {
-      score: 1,
-    },
-  },
-};
 // CONFIG FROM SOFTWARE EVENT
-export const config = derived(socketMessageStore, ($msg, set) => {
-  // if (!$msg) return;
-  if ($msg?.event === "config:update_config") {
+export const config = derived(socketOverlayMessageStore, ($msg, set) => {
+  if (!$msg) return;
+  if (
+    $msg?.event === "config:update_config" ||
+    $msg?.event === "config:no_config"
+  ) {
     set($msg.data);
   }
 });
 
 export const colors = derived(config, ($update, set) => {
-  // if (!$update) return;
+  if (!$update) return;
   if ($update?.colors) {
     const colors = $update.colors;
     set(colors);
-  } else {
-    set({
-      [0]: { primary: "#700", secondary: "#FFF", mutual: "#121013" },
-      [1]: { primary: "#00549A", secondary: "#FFF", mutual: "#121013" },
-    });
   }
 });
 
 export const logos = derived(config, ($update, set) => {
-  // if (!$update) return;
+  if (!$update) return;
   if ($update?.logos) {
     const logos = $update.logos;
     set(logos);
-  } else {
-    set({
-      [0]: {
-        primary:
-          "https://floridatechsports.com/images/responsive_2021/AT-Panther_head-only.png",
-      },
-      [1]: {
-        primary:
-          "https://cdn.discordapp.com/attachments/822578384479322160/1092609383868923954/eSports.png",
-      },
-    });
   }
 });
 
 export const team_info = derived(config, ($update, set) => {
-  // if (!$update) return;
+  if (!$update) return;
 
   if ($update?.team_info) {
     const team_info = $update.team_info;
     set(team_info);
-  } else {
-    set({
-      [0]: {
-        name: "Florida Tech",
-        players: {},
-      },
-      [1]: {
-        name: "EARU Varsity",
-        players: {},
-      },
-    });
   }
 });
 
 export const series = derived(config, ($update, set) => {
-  // if (!$update) return;
+  if (!$update) return;
   if ($update?.series) {
     const series = $update.series;
     set(series);
-  } else {
-    set({
-      best_of: 3,
-      [0]: {
-        score: 1,
-      },
-      [1]: {
-        score: 1,
-      },
-    });
   }
 });
