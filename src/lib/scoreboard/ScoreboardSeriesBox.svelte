@@ -2,21 +2,23 @@
     import { series } from "../processor";
     export let team = 0;
     let left = team === 0;
-    let best_of = $series.best_of;
-    let team_score = $series[team].score;
+    let best_of = $series?.best_of || null;
+    let team_score = $series?.[team].score;
 
     // Calculate the number of lines needed to win
     let linesToWin = Math.ceil(best_of / 2);
 </script>
 
 <div class="team_series_box {left ? 'left_team_series_box' : 'right_team_series_box'}">
-    {#each Array(linesToWin) as _, index}
-        {#if index < team_score}
-            <div class="team_series_point"/>
-        {:else}
-            <div class="team_series_point team_series_point_empty"/>
-        {/if}
-    {/each}
+    {#if best_of}
+        {#each Array(linesToWin) as _, index}
+            {#if index < team_score}
+                <div class="team_series_point"/>
+            {:else}
+                <div class="team_series_point team_series_point_empty"/>
+            {/if}
+        {/each}
+    {/if}
 </div>
 
 <style>

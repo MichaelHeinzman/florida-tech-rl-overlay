@@ -1,38 +1,42 @@
 <script>
+  import { fly } from "svelte/transition";
     import { getColorsFromTeam } from "./helpers";
     import {targetPlayer, goal_scored} from "./processor";
     import {colors, team_info} from "./processor";
     import Boost from "./team-boost/Boost.svelte";
+  import { quartInOut } from "svelte/easing";
 </script>
-  
-<div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team_num, $colors)?.primary}">
-    <div class="player_card_boost_box">
-        <span>{$targetPlayer?.name}</span>
-        <Boost percent={80} target={true} />
-    </div>
-    <div class="player_card_stat_box">
-        <div class="player_card_stat_box_stat">
-            <span>GOALS</span>
-            <span>{$targetPlayer?.goals || 0}</span>
-        </div>
-        <div class="player_card_stat_box_stat">
-            <span>SHOTS</span>
-            <span>{$targetPlayer?.shots || 0}</span>
-        </div>
-        <div class="player_card_stat_box_stat">
-            <span>ASST</span>
-            <span>{$targetPlayer?.assists || 0}</span>
-        </div>
-        <div class="player_card_stat_box_stat">
-            <span>SAVES</span>
-            <span>{$targetPlayer?.saves || 0 }</span>
-        </div>
-    </div>
 
-    <div class="player_card_photo_box" style="box-shadow: 0px 4px 24px 15px {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}; display: {$goal_scored?.scorer?.id === $targetPlayer?.id && $team_info?.[$targetPlayer?.team_num]?.players ? "flex" : "none"}">
-        <img src={$team_info?.[$targetPlayer?.team_num]?.players?.[$targetPlayer?.name]?.photo} alt={$targetPlayer?.name} class="player_photo"/>
+{#if $targetPlayer?.name}
+    <div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team_num, $colors)?.primary}" transition:fly={{x: -300, easing: quartInOut}}>
+        <div class="player_card_boost_box">
+            <span>{$targetPlayer?.name}</span>
+            <Boost percent={$targetPlayer.boost} target={true} />
+        </div>
+        <div class="player_card_stat_box">
+            <div class="player_card_stat_box_stat">
+                <span>GOALS</span>
+                <span>{$targetPlayer?.goals || 0}</span>
+            </div>
+            <div class="player_card_stat_box_stat">
+                <span>SHOTS</span>
+                <span>{$targetPlayer?.shots || 0}</span>
+            </div>
+            <div class="player_card_stat_box_stat">
+                <span>ASST</span>
+                <span>{$targetPlayer?.assists || 0}</span>
+            </div>
+            <div class="player_card_stat_box_stat">
+                <span>SAVES</span>
+                <span>{$targetPlayer?.saves || 0 }</span>
+            </div>
+        </div>
+
+        <div class="player_card_photo_box" style="box-shadow: 0px 4px 24px 15px {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}; display: {$goal_scored?.scorer?.id === $targetPlayer?.id && $team_info?.[$targetPlayer?.team_num]?.players ? "flex" : "none"}">
+            <img src={$team_info?.[$targetPlayer?.team_num]?.players?.[$targetPlayer?.name]?.photo} alt={$targetPlayer?.name} class="player_photo"/>
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
     .player_card_box {

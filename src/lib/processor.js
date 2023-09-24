@@ -1,20 +1,66 @@
 import { derived } from "svelte/store";
 import { socketMessageStore } from "./socket";
+import { convertSecondsToMinutesAndSeconds } from "./helpers";
 
-export const goal_scored = derived(socketMessageStore, ($msg, set) => {
-  if (!$msg) return;
-  if ($msg?.event === "game:goal_scored") {
+// MATCH CREATED EVENT
+export const matchCreated = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:match_created") {
+    set($msg.data);
+    console.log($msg);
+  }
+});
+
+// GAME INITIALIZED
+export const gameInitialized = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:initialized") {
     set($msg.data);
   }
 });
 
+// GAME PRE COUNTDOWN BEGIN
+export const gamePrecountdownBegin = derived(
+  socketMessageStore,
+  ($msg, set) => {
+    if (!$msg) return false;
+    if ($msg?.event === "game:pre_countdown_begin") {
+      set($msg.data);
+    }
+  }
+);
+
+// GAME POST COUNTDOWN BEGIN
+export const gamePostcountdownBegin = derived(
+  socketMessageStore,
+  ($msg, set) => {
+    if (!$msg) return false;
+    if ($msg?.event === "game:post_countdown_begin") {
+      set($msg.data);
+    }
+  }
+);
+
+// GAME UPDATE STATE EVENT
 export const updateState = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return;
   if ($msg?.event === "game:update_state") {
     set($msg.data);
   }
+  {
+    if ($msg?.event === "game:match_destroyed") set(false);
+  }
 });
 
+export const time = derived(updateState, ($update, set) => {
+  if (!$update) return;
+  if ($update?.game?.time_seconds) {
+    const time = convertSecondsToMinutesAndSeconds($update?.game?.time_seconds);
+    set(time);
+  } else {
+    set("5:00");
+  }
+});
 export const scores = derived(updateState, ($update, set) => {
   if (!$update) return;
   if ($update?.game?.teams) {
@@ -37,7 +83,7 @@ export const targetPlayer = derived(updateState, ($update, set) => {
     const player = $update.players[$update.game.target];
     set(player);
   } else {
-    set({});
+    set(null);
   }
 });
 
@@ -51,15 +97,88 @@ export const players = derived(updateState, ($update, set) => {
   }
 });
 
+// GAME STAT FEED EVENT
+export const statFeedEvent = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return null;
+  if ($msg?.event === "game:statfeed_event") {
+    set($msg.data);
+  }
+});
+
+// GAME GOAL SCORED EVENT
+export const goal_scored = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return { scorer: null };
+  if ($msg?.event === "game:goal_scored") {
+    set($msg.data);
+  } else {
+    if ($msg?.event === "game:replay_end") set(false);
+  }
+});
+
+// GAME REPLAY START EVENT
+export const replayStart = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:replay_start") {
+    set($msg.data);
+  } else {
+    if ($msg?.event === "game:replay_will_end") set(false);
+  }
+});
+
+// GAME REPLAY WILL END EVENT
+export const replayWillEnd = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:replay_will_end") {
+    set($msg.data);
+  } else {
+    if ($msg?.event === "game:replay_end") set(false);
+  }
+});
+
+// GAME REPLAY END EVENT
+export const replayEnd = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:replay_end") {
+    set($msg.data);
+  } else {
+    if ($msg?.event !== "game:update_state") set(false);
+  }
+});
+
+// GAME MATCH ENDED
+export const matchEnded = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:match_ended") {
+    set($msg.data);
+  } else set(false);
+});
+
+// GAME PODIUM START
+export const podiumStart = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:podium_start") {
+    set($msg.data);
+  }
+});
+
+// MATCH DESTROYED
+export const matchDestroyed = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:match_destroyed") {
+    set($msg.data);
+  } else set(false);
+});
+
+// CONFIG FROM SOFTWARE EVENT
 export const config = derived(socketMessageStore, ($msg, set) => {
-  if (!$msg) return;
+  // if (!$msg) return;
   if ($msg?.event === "config:update_config") {
     set($msg.data);
   }
 });
 
 export const colors = derived(config, ($update, set) => {
-  if (!$update) return;
+  // if (!$update) return;
   if ($update?.colors) {
     const colors = $update.colors;
     set(colors);
@@ -72,7 +191,7 @@ export const colors = derived(config, ($update, set) => {
 });
 
 export const logos = derived(config, ($update, set) => {
-  if (!$update) return;
+  // if (!$update) return;
   if ($update?.logos) {
     const logos = $update.logos;
     set(logos);
@@ -91,7 +210,7 @@ export const logos = derived(config, ($update, set) => {
 });
 
 export const team_info = derived(config, ($update, set) => {
-  if (!$update) return;
+  // if (!$update) return;
 
   if ($update?.team_info) {
     const team_info = $update.team_info;
@@ -101,7 +220,15 @@ export const team_info = derived(config, ($update, set) => {
       [0]: {
         name: "Florida Tech",
         players: {
-          "Four Leaf Grover": {
+          REX: {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+          SAMARA: {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+          SUNDOWN: {
             photo:
               "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
           },
@@ -110,7 +237,15 @@ export const team_info = derived(config, ($update, set) => {
       [1]: {
         name: "EARU Varsity",
         players: {
-          "Four Leaf Grover": {
+          FOAMER: {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+          SULTAN: {
+            photo:
+              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
+          },
+          VIPER: {
             photo:
               "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
           },
@@ -121,7 +256,7 @@ export const team_info = derived(config, ($update, set) => {
 });
 
 export const series = derived(config, ($update, set) => {
-  if (!$update) return;
+  // if (!$update) return;
   if ($update?.series) {
     const series = $update.series;
     set(series);

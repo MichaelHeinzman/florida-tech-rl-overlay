@@ -1,18 +1,17 @@
 <script>
-    import { getColorsFromTeam } from "../helpers";
-import {logos, colors, team_info} from "../processor";
+  import {fly,  } from "svelte/transition";
+  import { team_info, time} from "../processor";
   import ScoreboardTeamBox from "./ScoreboardTeamBox.svelte";
+  import { backInOut, } from "svelte/easing";
 </script>
 
-<div class="scoreboard">
-
-    <span class="team_box_name left_team_box_name">{$team_info[0]?.name}</span>
-    <span class="team_box_name right_team_box_name">{$team_info[1]?.name}</span>
+<div class="scoreboard" transition:fly={{y: -100, easing: backInOut}} >
+    <span class="team_box_name left_team_box_name">{$team_info?.[0]?.name}</span>
+    <span class="team_box_name right_team_box_name">{$team_info?.[1]?.name}</span>
 
     <ScoreboardTeamBox team={0}/>
     <ScoreboardTeamBox team={1}/>
-    <div class="time_box"><span class="time">5:00</span></div>
-
+    <div class="time_box"><span class="time">{$time ||"5:00"}</span></div>
 </div>
 
 <style>
