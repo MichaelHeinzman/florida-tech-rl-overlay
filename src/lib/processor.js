@@ -102,6 +102,8 @@ export const statFeedEvent = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return null;
   if ($msg?.event === "game:statfeed_event") {
     set($msg.data);
+  } else {
+    if ($msg?.event === "game:replay_start") set(null);
   }
 });
 

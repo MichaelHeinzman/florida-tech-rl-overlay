@@ -15,7 +15,6 @@
         <TeamPlayerBoost team={0}/>
         <TeamPlayerBoost team={1}/>
     {/if}
-    <span style="position: absolute; bottom: 0px;">{JSON.stringify($statFeedEvent)}</span>
     {#if $updateState?.game?.isReplay}
       <ReplayScene />
     {/if}

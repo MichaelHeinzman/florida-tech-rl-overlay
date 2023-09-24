@@ -4,36 +4,6 @@
     export let player = null;
     import Boost from "./Boost.svelte";
 
-    // Use a store to keep track of statFeed events
-    import { writable } from 'svelte/store';
-    const statFeedEvents = writable([]);
-
-    // Function to add a statFeed event to the store
-    const addStatFeedEvent = (event) => {
-      statFeedEvents.update((events) => [...events, event]);
-    };
-    // Function to remove the oldest statFeed event from the store
-    const removeOldestStatFeedEvent = () => {
-      statFeedEvents.update((events) => {
-        const [, ...rest] = events; // Remove the oldest event
-        return rest;
-      });
-    };
-
-    // Function to handle displaying and removing statFeed events
-    const handleStatFeedEvents = () => {
-      console.log($statFeedEvents)
-
-      const event = $statFeedEvent; // Get the current list of events
-        if (isMainTarget(event, player) || isSecondaryTarget(event, player))
-          addStatFeedEvent(event); // Add it again to keep displaying it
-        setTimeout(() => {
-          removeOldestStatFeedEvent(); // Remove the oldest event after 2 seconds
-        }, 2000);
-      }
-    // Watch for changes in the statFeedEvents store
-    $: handleStatFeedEvents();
-
     const isMainTarget = (statFeedEvent, player) => {
       return statFeedEvent?.main_target?.id === player?.id;
     }
@@ -49,17 +19,15 @@
     }
 
     const backgroundWhenStatAchieved = (statFeedEvent, player) => {
-      if ((isMainTarget(statFeedEvent, player) || isSecondaryTarget(statFeedEvent, player)) &&  $statFeedEvents?.length > 0)
+      if (isMainTarget(statFeedEvent, player) || isSecondaryTarget(statFeedEvent, player))
         return `background: linear-gradient(270deg, ${getColorsFromTeam(player?.team, $colors)?.primary} 0%, #1D1D21 100%);`
     }
 </script>
   
   <div class="player_boost_box" style="{backgroundWhenStatAchieved($statFeedEvent, player)}">
-    {#if $statFeedEvents?.length > 0}
+    {#if $statFeedEvent?.main_target?.id === player?.id}
       <div class="stat_box {statBoxLogic($statFeedEvent, player)}" >
-        {#each $statFeedEvents as statEvent, index}
-          <img src={statIconFromEvent(statEvent.event_name)} alt={statEvent.event_name} class="stat_icon"/>
-        {/each}
+        <img src={statIconFromEvent($statFeedEvent?.event_name)} alt={$statFeedEvent?.event_name} class="stat_icon"/>
       </div>
     {/if}
     <div class="player_boost_box_container">
@@ -87,16 +55,12 @@
       padding-left: 27.8px;
       padding-right: 13.2px;
       padding-bottom: 8px;
-      transition: width 1s ease-in-out;
+      transition: width 4s ease-in-out;
     }
     .player_boost_box_container {
       min-width: 347px;
       height: 100%;
       order: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: start;
     }
     .name {
       color: #FFF;
