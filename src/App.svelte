@@ -1,8 +1,7 @@
 <script>
   import PlayerCard from "./lib/PlayerCard.svelte";
   import TargetBoost from "./lib/TargetBoost.svelte";
-  import { statIconFromEvent } from "./lib/helpers";
-  import { statFeedEvent, updateState, } from "./lib/processor";
+  import {updateState,config } from "./lib/processor";
   import ReplayScene from "./lib/replay-scene/ReplayScene.svelte";
   import Scoreboard from "./lib/scoreboard/Scoreboard.svelte";
   import TeamPlayerBoost from "./lib/team-boost/TeamPlayerBoost.svelte";
@@ -10,7 +9,7 @@
 </script>
 
 <main class="app">
-    {#if ((!$updateState?.game?.isReplay && $updateState?.hasGame))}
+    {#if ((!$updateState?.game?.isReplay))}
         <Scoreboard/>
         <TeamPlayerBoost team={0}/>
         <TeamPlayerBoost team={1}/>

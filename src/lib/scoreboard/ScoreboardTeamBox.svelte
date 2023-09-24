@@ -12,7 +12,7 @@
     <ScoreboardSeriesBox team={team}/>
     <div class="team_box_container {left ? "left_team_box_container" : "right_team_box_container"}" style="background: linear-gradient(180deg, {getColorsFromTeam(team, $colors)?.primary} 0%, rgba(5, 0, 0, 0.53) 100%);  {$goal_scored?.scorer?.teamnum === team ? (team === 0 ? "padding-left: 40px" : "padding-right: 40px") : "padding-left: 0px; padding-right: 0px;"}">
         <img class="team_box_logo {left ? "left_team_box_logo" : "right_team_box_logo"}" src={$logos?.[team]?.primary}  alt={$team_info?.[team]?.name} style="display: {$goal_scored?.scorer?.teamnum === team ? "none" : "flex"}"/>
-        <span class="team_box_score">{$goal_scored?.scorer?.teamnum === team ? "GOAL" : $scores?.[team]}</span>
+        <span class="team_box_score">{$goal_scored?.scorer?.teamnum === team ? "GOAL" : $scores?.[team] || 0}</span>
     </div>
 </div>
 
