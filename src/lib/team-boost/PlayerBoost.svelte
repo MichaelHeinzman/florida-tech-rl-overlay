@@ -14,12 +14,12 @@
     const statBoxLogic = (statFeedEvent, player) => {
       if (isMainTarget(statFeedEvent, player))
         return statFeedEvent?.main_target?.team_num === 0 ? "left_stat_box" : "right_stat_box";
-      if (isSecondaryTarget(statFeedEvent, player))
-        return statFeedEvent?.secondary_target?.team_num === 0 ? "left_stat_box" : "right_stat_box";
+      // if (isSecondaryTarget(statFeedEvent, player))
+      //   return statFeedEvent?.secondary_target?.team_num === 0 ? "left_stat_box" : "right_stat_box";
     }
 
     const backgroundWhenStatAchieved = (statFeedEvent, player) => {
-      if (isMainTarget(statFeedEvent, player) || isSecondaryTarget(statFeedEvent, player))
+      if (isMainTarget(statFeedEvent, player))
         return `background: linear-gradient(270deg, ${getColorsFromTeam(player?.team, $colors)?.primary} 0%, #1D1D21 100%);`
     }
 </script>
