@@ -171,6 +171,47 @@ export const matchDestroyed = derived(socketMessageStore, ($msg, set) => {
   } else set(false);
 });
 
+const configTemplate = {
+  colors: {
+    [0]: { primary: "#700", secondary: "#FFF", mutual: "#121013" },
+    [1]: { primary: "#00549A", secondary: "#FFF", mutual: "#121013" },
+  },
+  logos: {
+    [0]: {
+      primary:
+        "https://floridatechsports.com/images/responsive_2021/AT-Panther_head-only.png",
+    },
+    [1]: {
+      primary:
+        "https://cdn.discordapp.com/attachments/822578384479322160/1092609383868923954/eSports.png",
+    },
+  },
+  team_info: {
+    [0]: {
+      name: "Florida Tech",
+      players: {
+        DASC: {
+          photo: "",
+        },
+        BEASTINNFEASTIN: {
+          photo: "",
+        },
+        AYYLO: {
+          photo: "",
+        },
+      },
+    },
+  },
+  series: {
+    best_of: 3,
+    [0]: {
+      score: 1,
+    },
+    [1]: {
+      score: 1,
+    },
+  },
+};
 // CONFIG FROM SOFTWARE EVENT
 export const config = derived(socketMessageStore, ($msg, set) => {
   // if (!$msg) return;
@@ -221,37 +262,11 @@ export const team_info = derived(config, ($update, set) => {
     set({
       [0]: {
         name: "Florida Tech",
-        players: {
-          REX: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-          SAMARA: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-          SUNDOWN: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-        },
+        players: {},
       },
       [1]: {
         name: "EARU Varsity",
-        players: {
-          FOAMER: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-          SULTAN: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-          VIPER: {
-            photo:
-              "https://floridatechsports.com/images/2023/3/7/Seth_Heinzman_headshot_aD5b5.jpg?width=300",
-          },
-        },
+        players: {},
       },
     });
   }
