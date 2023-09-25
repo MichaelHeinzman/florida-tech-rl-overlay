@@ -8,7 +8,7 @@
 </script>
 
 {#if $targetPlayer?.name}
-    <div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team_num, $colors)?.primary}" transition:fly={{x: -300, easing: quartInOut}}>
+    <div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}" transition:fly={{x: -300, easing: quartInOut}}>
         <div class="player_card_boost_box">
             <span>{$targetPlayer?.name}</span>
             <Boost percent={$targetPlayer.boost} target={true} />
