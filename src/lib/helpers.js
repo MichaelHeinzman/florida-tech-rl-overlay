@@ -23,6 +23,7 @@ import LongGoal from "../assets/stat-icons/Long_Goal_points_icon.webp";
 import PoolShot from "../assets/stat-icons/Pool_Shot_points_icon.webp";
 import TurtleGoal from "../assets/stat-icons/Turtle_Goal_points_icon.webp";
 import LowFive from "../assets/stat-icons/Low_Five_points_icon.webp";
+import MVP from "../assets/stat-icons/MVP_points_icon.webp";
 
 export const statIconFromEvent = (event) => {
   console.log(event);
@@ -55,6 +56,8 @@ export const statIconFromEvent = (event) => {
       return TurtleGoal;
     case "LowFive":
       return LowFive;
+    case "MVP":
+      return MVP;
     default:
       return "";
   }
