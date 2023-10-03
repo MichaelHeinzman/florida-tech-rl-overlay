@@ -1,6 +1,6 @@
 <script>
   import { getColorsFromTeam } from "../helpers";
-  import {colors} from "../processor";
+  import {colors, } from "../processor";
 
   export let percent = 80;
   export let target = false;
@@ -8,7 +8,7 @@
 </script>
 
 <div class="boost_box {team === 0 ? "left_boost_box" : "right_boost_box"}" style="background: {getColorsFromTeam(team, $colors)?.mutual}">
-  <div class="boost_bar" style="width: {percent}%; background: {getColorsFromTeam(team, $colors)?.[target ? "secondary" : "primary"]}"/>
+  <div class="boost_bar" style="width: {percent}%; background: {getColorsFromTeam(team, $colors)?.[target? "secondary" : "primary"]}"/>
 </div>
 
 <style>

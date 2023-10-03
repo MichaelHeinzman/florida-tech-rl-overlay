@@ -1,16 +1,16 @@
 <script>
-  import { fly } from "svelte/transition";
-    import { getColorsFromTeam } from "./helpers";
-    import {targetPlayer, goal_scored} from "./processor";
-    import {colors, team_info} from "./processor";
+    import { fly } from "svelte/transition";
+    import { getColorsFromTeam,get_player_photo, get_team_logo_from_player} from "./helpers";
+    import {targetPlayer, } from "./processor";
+    import {colors, logos} from "./processor";
     import Boost from "./team-boost/Boost.svelte";
-  import { quartInOut } from "svelte/easing";
+    import { quartInOut } from "svelte/easing";
 </script>
 
 {#if $targetPlayer?.name}
     <div class="player_card_box" style="background: {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}" transition:fly={{x: -300, easing: quartInOut}}>
         <div class="player_card_boost_box">
-            <span>{$targetPlayer?.name}</span>
+            <span class="player_card_name">{$targetPlayer?.name}</span>
             <Boost percent={$targetPlayer.boost} target={true} />
         </div>
         <div class="player_card_stat_box">
@@ -31,10 +31,7 @@
                 <span>{$targetPlayer?.saves || 0 }</span>
             </div>
         </div>
-
-        <div class="player_card_photo_box" style="box-shadow: 0px 4px 24px 15px {getColorsFromTeam($targetPlayer?.team, $colors)?.primary}; display: {$goal_scored?.scorer?.id === $targetPlayer?.id && $team_info?.[$targetPlayer?.team_num]?.players ? "flex" : "none"}">
-            <img src={$team_info?.[$targetPlayer?.team_num]?.players?.[$targetPlayer?.name]?.photo} alt={$targetPlayer?.name} class="player_photo"/>
-        </div>
+        <img src={get_player_photo($targetPlayer?.name, get_team_logo_from_player($targetPlayer, $logos)) } alt={$targetPlayer?.name} class="player_photo"/>
     </div>
 {/if}
 
@@ -47,6 +44,7 @@
         flex-shrink: 0;
         margin-left: 52px;
         margin-bottom: 34px;
+        display: flex;
     }
     .player_card_stat_box {
         position: absolute;
@@ -78,7 +76,18 @@
         font-weight: 800;
         line-height: normal;
     }
+    .player_card_name {
+        color: #FFF;
+        font-family: Lato;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 800;
+        line-height: normal;
+        text-transform: uppercase;
+    }
     .player_card_boost_box{
+        z-index: 20;
+        position: relative;
         width: 258.329px;
         height: 100%;
         flex-shrink: 0;
@@ -98,22 +107,14 @@
         text-transform: uppercase;
         gap: 2px;
     }
-    .player_card_photo_box {
-        position: absolute;
-        bottom: 30px;
-        left: 25px;
-        margin-bottom: 54px;
-        width: 194px;
-        height: 304px;
-        flex-shrink: 0;
-        border-radius: 5px;
-        opacity: .5;
-        background: rgba(217, 217, 217, 0.14);
-        overflow: hidden;
-    }
+
     .player_photo {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
+        border-radius: 5%;
+        position: absolute;
+        top: -155px;
+        left: 0px;
+        height: 150px;
+        width: 150px;
+        object-fit: contain;
     }
 </style>
