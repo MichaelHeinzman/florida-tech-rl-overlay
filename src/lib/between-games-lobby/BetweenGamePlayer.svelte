@@ -9,11 +9,11 @@
     <img class="between_game_player_photo" src={get_player_photo(player?.name, null)} alt={"player"}/>
     <span class="between_game_team_stats_player_name">{player?.name}</span>
     <div class="labels {left_team ? "left_labels" : "right_labels"} between_game_team_player_stats">
-        <span class="label">{player?.score || 1200}</span>
-        <span class="label">{player?.goals || 10}</span>
-        <span class="label">{player?.assists || 10}</span>
-        <span class="label">{player?.saves || 10}</span>
-        <span class="label">{player?.shots || 10}</span>
+        <span class="label">{player?.score || 0}</span>
+        <span class="label">{player?.goals || 0}</span>
+        <span class="label">{player?.assists || 0}</span>
+        <span class="label">{player?.saves || 0}</span>
+        <span class="label">{player?.shots || 0}</span>
     </div>
 </div>
 
