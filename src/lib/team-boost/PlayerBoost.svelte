@@ -1,6 +1,6 @@
 <script>
     import { getColorsFromTeam, statIconFromEvent } from "../helpers";
-    import {statFeedEvent, colors} from "../processor";
+    import {statFeedEvent, colors,targetPlayer} from "../processor";
     export let player = null;
     import Boost from "./Boost.svelte";
 
@@ -19,6 +19,8 @@
     }
 
     const backgroundWhenStatAchieved = (statFeedEvent, player) => {
+      if ($targetPlayer?.id === player?.id) 
+        return `background: ${getColorsFromTeam(player?.team, $colors)?.primary}`
       if (isMainTarget(statFeedEvent, player))
         return `background: linear-gradient(270deg, ${getColorsFromTeam(player?.team, $colors)?.primary} 0%, #1D1D21 100%);`
     }
@@ -38,7 +40,7 @@
         <span class="boost_bar_amount name">{player?.boost}</span>
       </div>
   
-      <Boost percent="{player?.boost}" team={player?.team}/>
+      <Boost percent="{player?.boost}" team={player?.team} target={$targetPlayer?.id === player?.id}/>
     </div>
   </div>
 

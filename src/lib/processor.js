@@ -8,7 +8,6 @@ export const matchCreated = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return false;
   if ($msg?.event === "game:match_created") {
     set($msg.data);
-    console.log($msg);
   }
 });
 
@@ -16,8 +15,16 @@ export const matchCreated = derived(socketMessageStore, ($msg, set) => {
 export const gameInitialized = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return false;
   if ($msg?.event === "game:initialized") {
+    console.log("GAME INTIALIZED", $msg.data);
     set($msg.data);
   }
+
+  if ($msg?.event === "game:update_state") {
+    if ($msg.data.game.hasWinner) set(false);
+    else set(true);
+  }
+
+  if ($msg?.event === "game:match_ended") set(false);
 });
 
 // GAME PRE COUNTDOWN BEGIN
@@ -26,6 +33,7 @@ export const gamePrecountdownBegin = derived(
   ($msg, set) => {
     if (!$msg) return false;
     if ($msg?.event === "game:pre_countdown_begin") {
+      console.log("PRE COUNTDOWN", $msg.data);
       set($msg.data);
     }
   }
@@ -37,6 +45,7 @@ export const gamePostcountdownBegin = derived(
   ($msg, set) => {
     if (!$msg) return false;
     if ($msg?.event === "game:post_countdown_begin") {
+      console.log("PRE COUNTDOWN", $msg.data);
       set($msg.data);
     }
   }
@@ -114,7 +123,11 @@ export const goal_scored = derived(socketMessageStore, ($msg, set) => {
   if ($msg?.event === "game:goal_scored") {
     set($msg.data);
   } else {
-    if ($msg?.event === "game:replay_end") set(false);
+    if (
+      $msg?.event === "game:replay_end" ||
+      $msg?.event === "game:replay_start"
+    )
+      set({ scorer: null });
   }
 });
 
@@ -151,7 +164,20 @@ export const replayEnd = derived(socketMessageStore, ($msg, set) => {
 // GAME MATCH ENDED
 export const matchEnded = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return false;
+
   if ($msg?.event === "game:match_ended") {
+    set($msg.data);
+  }
+
+  if ($msg?.event === "game:podium_start") {
+    set(false);
+  }
+});
+
+// GAME CLOCK STOPPED
+export const clockStopped = derived(socketMessageStore, ($msg, set) => {
+  if (!$msg) return false;
+  if ($msg?.event === "game:clock_stopped") {
     set($msg.data);
   } else set(false);
 });
@@ -162,6 +188,7 @@ export const podiumStart = derived(socketMessageStore, ($msg, set) => {
   if ($msg?.event === "game:podium_start") {
     set($msg.data);
   }
+  if ($msg?.event === "game:match_created") set(false);
 });
 
 // MATCH DESTROYED
@@ -169,7 +196,8 @@ export const matchDestroyed = derived(socketMessageStore, ($msg, set) => {
   if (!$msg) return false;
   if ($msg?.event === "game:match_destroyed") {
     set($msg.data);
-  } else set(false);
+  }
+  if ($msg?.event === "game:match_created") set(false);
 });
 
 // CONFIG FROM SOFTWARE EVENT

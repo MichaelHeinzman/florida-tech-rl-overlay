@@ -4,7 +4,7 @@
   import { quartInOut } from "svelte/easing";
 </script>
 
-{#if $targetPlayer}
+{#if $targetPlayer?.name}
     <div
     transition:fly={{x: 400, easing: quartInOut, duration: 1000}}
     class="target_boost_box {$targetPlayer?.team === 0 ? "target_boost_box_left_team" : "target_boost_box_right_team"}"
